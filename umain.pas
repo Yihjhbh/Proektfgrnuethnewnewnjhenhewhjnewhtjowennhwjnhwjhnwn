@@ -11,7 +11,7 @@ uses
 type
 
   Tfloor=record
-  X, Y, X1, Y1, X2, Y2, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed: integer;
+  X, Y, X1, Y1, X2, Y2, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, speed1: integer;
   fall, falldown, fallcounteractive, jobfloor, dublicate1, dublicate2, dublicate3, dublicate4, invisible, wrongfall: boolean;
   heightfloor: real;
   end;
@@ -186,7 +186,7 @@ begin
   floor.wrongfall:= true;
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if (floor.Y >= floor.Y1-10) then
   begin
@@ -202,7 +202,7 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
@@ -216,14 +216,14 @@ begin
   if (crane.angle>=135) and (crane.angle<=158)then
   begin
   floor.X:=floor.X-3-floor.speed;
-  floor.Y:=floor.Y+1;
+  floor.Y:=floor.Y+1+floor.speed1;
   end;
   if (crane.angle>=158) and (crane.angle<=185) then
   floor.X:=floor.X-3-floor.speed;
   if (crane.angle>=189) and (crane.angle<=225) then
   begin
   floor.X:=floor.X-3-floor.speed;
-  floor.Y:=floor.Y-1;
+  floor.Y:=floor.Y-1-floor.speed1;
   end;
   end;
   // Качание крана
@@ -260,7 +260,7 @@ begin
   floor.wrongfall:= true;
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y >= floor.Y1-10 then
   begin
@@ -276,7 +276,7 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
@@ -288,14 +288,14 @@ begin
   if (crane.angle<=225) and (crane.angle>=185)then
   begin
   floor.X:=floor.X+3+floor.speed;
-  floor.Y:=floor.Y+1;
+  floor.Y:=floor.Y+1+floor.speed1;
   end;
   if (crane.angle<=185) and (crane.angle>=158) then
   floor.X:=floor.X+3+floor.speed;
   if (crane.angle<=158) and (crane.angle>=135) then
   begin
   floor.X:=floor.X+3+floor.speed;
-  floor.Y:=floor.Y-2;
+  floor.Y:=floor.Y-2-floor.speed1;
   end;
   end;
   // Качание крана
@@ -319,16 +319,17 @@ begin
   floor.fallcounter:=floor.fallcounter-1;
   floor.lifecounter:=floor.lifecounter-1;
   end;
-  if (floor.fallcounter = -5) then
+  if (floor.fallcounter = 5) then
   begin
   crane.speed:= 1;
   floor.speed:= 3;
+  floor.speed1:= 1;
   end;
-  if (floor.fallcounter = -10) then
+  if (floor.fallcounter = 10) then
   crane.speed:= 2;
-  if (floor.fallcounter = -15) then
+  if (floor.fallcounter = 15) then
   crane.speed:= 3;
-  if (floor.fallcounter = -20) then
+  if (floor.fallcounter = 20) then
   crane.speed:= 4;
   label1.Caption:='Счёт: '+IntToStr(floor.fallcounter);
   label2.Caption:='Жизни: '+IntToStr(floor.lifecounter);
@@ -376,7 +377,7 @@ end;
 
 procedure TForm1.Timer4Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter=1) and (floor.wrongfall=false) then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter=1) and (floor.wrongfall=false) and (floor.fall=false) then
   begin
   floor.dublicate1:= True;
   floor.shift:= 95;
@@ -391,7 +392,7 @@ begin
 
 procedure TForm1.Timer5Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.wrongfall=false) then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.fall=false)  then
   begin
   floor.dublicate2:= True;
   floor.dublicate1:=false;
@@ -408,7 +409,7 @@ end;
 
 procedure TForm1.Timer6Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) and (floor.fall=false) then
   begin
   floor.dublicate1:=True;
   floor.dublicate2:= False;

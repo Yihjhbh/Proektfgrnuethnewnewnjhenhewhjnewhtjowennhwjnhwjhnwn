@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units Count="7">
+    <Units Count="6">
       <Unit0>
         <Filename Value="rotate.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -19,8 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="197"/>
-        <CursorPos X="34" Y="215"/>
+        <TopLine Value="231"/>
+        <CursorPos X="23" Y="178"/>
         <UsageCount Value="212"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -49,7 +49,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="15"/>
         <CursorPos X="17" Y="42"/>
-        <UsageCount Value="124"/>
+        <UsageCount Value="170"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit3>
@@ -60,26 +60,19 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="51" Y="6"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="143"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit4>
       <Unit5>
-        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="921"/>
-        <CursorPos Y="942"/>
-        <UsageCount Value="1"/>
-      </Unit5>
-      <Unit6>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\winunits-base\src\mmsystem.pp"/>
         <UnitName Value="MMSystem"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2598"/>
         <CursorPos X="10" Y="2618"/>
-        <UsageCount Value="10"/>
-      </Unit6>
+        <UsageCount Value="5"/>
+      </Unit5>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="unit2.pas"/>
         <Caret Line="30" Column="41"/>
@@ -194,12 +187,8 @@
       </Position28>
       <Position29>
         <Filename Value="umain.pas"/>
-        <Caret Line="69" Column="36" TopLine="83"/>
-      </Position29>
-      <Position30>
-        <Filename Value="umain.pas"/>
         <Caret Line="167" Column="25" TopLine="149"/>
-      </Position30>
+      </Position29>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

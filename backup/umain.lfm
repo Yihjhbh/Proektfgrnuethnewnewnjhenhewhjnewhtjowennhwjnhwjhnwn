@@ -196,13 +196,13 @@ object Form1: TForm1
     Alignment = taCenter
   end
   object Label1: TLabel
-    Left = 416
+    Left = 393
     Height = 1
     Top = 19
     Width = 1
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clGray
-    Font.Height = -27
+    Font.Height = -23
     Font.Name = 'Comic Sans MS'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
@@ -216,12 +216,27 @@ object Form1: TForm1
     Width = 1
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clGray
-    Font.Height = -27
+    Font.Height = -23
     Font.Name = 'Comic Sans MS'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     Font.Style = [fsBold]
     ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 96
+    Height = 28
+    Top = 488
+    Width = 143
+    Caption = 'Прекрасно!  +2'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Color = clGray
+    Font.Height = -20
+    Font.Name = 'Comic Sans MS'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    Visible = False
   end
   object Image1: TImage
     Left = 480

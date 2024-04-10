@@ -11,7 +11,7 @@ uses
 type
 
   Tfloor=record
-  X, Y, X1, Y1, X2, Y2, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, speed1: integer;
+  X, Y, X1, Y1, X2, Y2, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, speed1, combo, combocounter: integer;
   fall, falldown, fallcounteractive, jobfloor, dublicate1, dublicate2, dublicate3, dublicate4, invisible, wrongfall: boolean;
   heightfloor: real;
   end;
@@ -33,6 +33,7 @@ type
     Image2: TImage;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
     Timer1: TTimer;
     Timer2: TTimer;
     Timer3: TTimer;
@@ -135,6 +136,7 @@ begin
   label2.Caption:='Жизни: '+ IntToStr(floor.lifecounter);
   BorderIcons:=BorderIcons-[bimaximize];
   PlaySound('sound/sound_background',0,SND_ASYNC or SND_LOOP);
+  label3.Font.Orientation:=300;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -146,9 +148,8 @@ end;
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
-  if key=VK_Space then
+  if (key=VK_Space) and (floor.fall=false) and (floor.jobfloor=true) then
   begin
-  if (floor.fall=false) and (floor.jobfloor=true) then
   floor.fallcounter:= floor.fallcounter+1;
   floor.fall:= True;
   end;
@@ -175,7 +176,7 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  floor.Y:= floor.Y+15;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
@@ -202,10 +203,24 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
+  if (floor.X>= floor.X1-5) and (floor.X<= floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  begin
+  label3.Visible:= True;
+  floor.combo:= floor.combo+1;
+  if floor.combo=1 then
+  floor.combocounter:= floor.combocounter+1;
+  if floor.combo> 1 then
+  begin
+  label3.Caption:= 'Комбо X'+inttostr(floor.combo-1)+'  +'+inttostr(4*(floor.combo-1));
+  floor.combocounter:= floor.combocounter+4*(floor.combo-1)-1;
+  end;
+  end;
+  if (floor.X< floor.X1-5) and (floor.X> floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  floor.combo:=0;
   end;
   if ((floor.Y=110) and (floor.X=333)) then
   floor.jobfloor:= True;
@@ -249,7 +264,7 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  floor.Y:= floor.Y+15;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
@@ -272,14 +287,28 @@ begin
   crane.jobcrane:= True;
   end;
   // Этаж падает на другой этаж
-  if (floor.fall=True) and (floor.Y<=floor.Y1-floor.heightfloor) and (floor.falldown=False) and ((floor.X= floor.X1-55) and (floor.X= floor.X1+55)) then
+  if (floor.fall=True) and (floor.Y<=floor.Y1-floor.heightfloor) and (floor.falldown=False) and ((floor.X> floor.X1-55) and (floor.X< floor.X1+55)) then
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15;
+  floor.Y:= floor.Y+15+floor.speed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
+  if (floor.X>= floor.X1-5) and (floor.X<= floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  begin
+  label3.Visible:= True;
+  floor.combo:= floor.combo+1;
+  if floor.combo=1 then
+  floor.combocounter:= floor.combocounter+1;
+  if floor.combo> 1 then
+  begin
+  label3.Caption:= 'Комбо X'+inttostr(floor.combo-1)+'  +'+inttostr(4*(floor.combo-1));
+  floor.combocounter:= floor.combocounter+4*(floor.combo-1)-1;
+  end;
+  end;
+  if (floor.X< floor.X1-5) and (floor.X> floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  floor.combo:=0;
   end;
   // Анимация этажа
   if floor.jobfloor = True then
@@ -310,6 +339,7 @@ begin
   begin
   Timer2.Enabled := False;
   Timer1.Enabled := True;
+  label3.Visible:= False;
   if floor.fall= false then
   begin
   floor.X:=333;
@@ -319,20 +349,20 @@ begin
   floor.fallcounter:=floor.fallcounter-1;
   floor.lifecounter:=floor.lifecounter-1;
   end;
-  if (floor.fallcounter = 5) then
+  if (floor.fallcounter = 10) then
   begin
   crane.speed:= 1;
   floor.speed:= 3;
   floor.speed1:= 1;
   end;
-  if (floor.fallcounter = 10) then
-  crane.speed:= 2;
-  if (floor.fallcounter = 15) then
-  crane.speed:= 3;
   if (floor.fallcounter = 20) then
-  crane.speed:= 4;
-  label1.Caption:='Счёт: '+IntToStr(floor.fallcounter);
+  begin
+  crane.speed:= 2;
+  floor.speed:= 6;
+  floor.speed1:= 2;
+  end;
   label2.Caption:='Жизни: '+IntToStr(floor.lifecounter);
+  label1.Caption:='Счёт: '+IntToStr(floor.fallcounter+floor.combocounter);
   if floor.lifecounter=0 then
   begin
   Form1.Hide;

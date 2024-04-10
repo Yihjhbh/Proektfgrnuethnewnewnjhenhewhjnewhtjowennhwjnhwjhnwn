@@ -1,7 +1,7 @@
 object Form2: TForm2
-  Left = 60
+  Left = -14
   Height = 422
-  Top = 692
+  Top = 515
   Width = 662
   Caption = 'Sky Scraper'
   ClientHeight = 422

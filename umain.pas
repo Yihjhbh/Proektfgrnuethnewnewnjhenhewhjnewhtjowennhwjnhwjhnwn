@@ -6,12 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, BGRAGraphicControl, BGRABitmap, BCTypes, BGRABitmapTypes, Windows, MMSystem;
+  StdCtrls, BGRAGraphicControl, BGRABitmap, BCTypes, BCMaterialEdit,
+  BCRadialProgressBar, BGRAFlashProgressBar, BGRABitmapTypes, Windows, MMSystem;
 
 type
 
   Tfloor=record
-  X, Y, X1, Y1, X2, Y2, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, speed1, combo, combocounter: integer;
+  X, Y, X1, Y1, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, fallspeed, combo, combocounter: integer;
   fall, falldown, fallcounteractive, jobfloor, dublicate1, dublicate2, dublicate3, dublicate4, invisible, wrongfall: boolean;
   heightfloor: real;
   end;
@@ -125,7 +126,6 @@ begin
   crane.speed:=0;
   floor.speed:=0;
   floor.falldown:= True;
-  floor.fall := False;
   floor.jobfloor:= True;
   crane.jobcrane:= True;
   floor.dublicate1:= False;
@@ -152,6 +152,10 @@ begin
   begin
   floor.fallcounter:= floor.fallcounter+1;
   floor.fall:= True;
+  if (crane.angle<=185) and (crane.angle>=158) then
+  floor.fallspeed:= 18;
+  if (crane.angle=157) and (crane.angle>=135) then  //(crane.angle>=185) and (crane.angle<=225)
+  floor.fallspeed:= 19;
   end;
 end;
 
@@ -171,6 +175,7 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject); // Код для движения влево
 begin
+  //form1.Caption:=inttostr(floor.Y);
   // Падение первого этажа
   if (floor.fall=True) and (floor.Y<=600) and (floor.falldown=True) then
   begin
@@ -184,10 +189,11 @@ begin
   // Этаж падает мимо другого этажа
   if (floor.fall=True) and (floor.falldown=False) and ((floor.X<= floor.X1-55) or (floor.X>= floor.X1+55)) then
   begin
+  floor.combo:=0;
   floor.wrongfall:= true;
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  floor.Y:= floor.Y+floor.fallspeed;
   BGRAGraphicControl1.DiscardBitmap;
   if (floor.Y >= floor.Y1-10) then
   begin
@@ -203,11 +209,11 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  floor.Y:= floor.Y+floor.fallspeed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
-  if (floor.X>= floor.X1-5) and (floor.X<= floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  if (floor.X>= floor.X1-2) and (floor.X<= floor.X1+2) and (floor.Y >= floor.Y1-10) then
   begin
   label3.Visible:= True;
   floor.combo:= floor.combo+1;
@@ -218,8 +224,8 @@ begin
   label3.Caption:= 'Комбо X'+inttostr(floor.combo-1)+'  +'+inttostr(4*(floor.combo-1));
   floor.combocounter:= floor.combocounter+4*(floor.combo-1)-1;
   end;
-  end;
-  if (floor.X< floor.X1-5) and (floor.X> floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  end
+  else if (floor.Y >= floor.Y1-10) then
   floor.combo:=0;
   end;
   if ((floor.Y=110) and (floor.X=333)) then
@@ -231,14 +237,14 @@ begin
   if (crane.angle>=135) and (crane.angle<=158)then
   begin
   floor.X:=floor.X-3-floor.speed;
-  floor.Y:=floor.Y+1+floor.speed1;
+  floor.Y:=floor.Y+1+crane.speed;
   end;
   if (crane.angle>=158) and (crane.angle<=185) then
   floor.X:=floor.X-3-floor.speed;
-  if (crane.angle>=189) and (crane.angle<=225) then
+  if (crane.angle>=185) and (crane.angle<=225) then
   begin
-  floor.X:=floor.X-3-floor.speed;
-  floor.Y:=floor.Y-1-floor.speed1;
+  floor.X:=floor.X-2-floor.speed;
+  floor.Y:=floor.Y-1-crane.speed;
   end;
   end;
   // Качание крана
@@ -259,6 +265,7 @@ end;
 
 procedure TForm1.Timer2Timer(Sender: TObject); // Код для движения вправо
 begin
+  form1.Caption:=inttostr(floor.Y);
   // Падение первого этажа
   if (floor.fall=True) and (floor.Y<=600) and (floor.falldown=True) then
   begin
@@ -272,10 +279,11 @@ begin
   // Этаж падает мимо другого этажа
   if (floor.fall=True) and (floor.falldown=False) and ((floor.X<= floor.X1-55) or (floor.X>= floor.X1+55)) then
   begin
+  floor.combo:=0;
   floor.wrongfall:= true;
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  floor.Y:= floor.Y+floor.fallspeed;
   BGRAGraphicControl1.DiscardBitmap;
   if floor.Y >= floor.Y1-10 then
   begin
@@ -291,11 +299,19 @@ begin
   begin
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+15+floor.speed;
+  if (crane.angle<=185) and (crane.angle>=158) then
+  begin
+  floor.Y:= floor.Y+floor.fallspeed;
   BGRAGraphicControl1.DiscardBitmap;
+  end;
+  if ((crane.angle<=225) and (crane.angle>=185)) or ((crane.angle<=158) and (crane.angle>=135)) then
+  begin
+  floor.Y:= floor.Y+1+floor.fallspeed;
+  BGRAGraphicControl1.DiscardBitmap;
+  end;
   if floor.Y>= 150 then
   crane.jobcrane:= True;
-  if (floor.X>= floor.X1-5) and (floor.X<= floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  if (floor.X>= floor.X1-2) and (floor.X<= floor.X1+2) and (floor.Y >= floor.Y1-10) then
   begin
   label3.Visible:= True;
   floor.combo:= floor.combo+1;
@@ -306,9 +322,12 @@ begin
   label3.Caption:= 'Комбо X'+inttostr(floor.combo-1)+'  +'+inttostr(4*(floor.combo-1));
   floor.combocounter:= floor.combocounter+4*(floor.combo-1)-1;
   end;
-  end;
-  if (floor.X< floor.X1-5) and (floor.X> floor.X1+5) and (floor.Y >= floor.Y1-10) then
+  end
+  else if (floor.Y >= floor.Y1-10) then
+  begin
   floor.combo:=0;
+  label3.Caption:='Идеально!  +2'
+  end;
   end;
   // Анимация этажа
   if floor.jobfloor = True then
@@ -316,15 +335,15 @@ begin
   floor.invisible:= true;
   if (crane.angle<=225) and (crane.angle>=185)then
   begin
-  floor.X:=floor.X+3+floor.speed;
-  floor.Y:=floor.Y+1+floor.speed1;
+  floor.X:=floor.X+2+floor.speed;
+  floor.Y:=floor.Y+1+crane.speed;
   end;
   if (crane.angle<=185) and (crane.angle>=158) then
   floor.X:=floor.X+3+floor.speed;
   if (crane.angle<=158) and (crane.angle>=135) then
   begin
   floor.X:=floor.X+3+floor.speed;
-  floor.Y:=floor.Y-2-floor.speed1;
+  floor.Y:=floor.Y-1-crane.speed;
   end;
   end;
   // Качание крана
@@ -349,17 +368,16 @@ begin
   floor.fallcounter:=floor.fallcounter-1;
   floor.lifecounter:=floor.lifecounter-1;
   end;
-  if (floor.fallcounter = 10) then
+  if (floor.fallcounter = 20) then
   begin
   crane.speed:= 1;
   floor.speed:= 3;
-  floor.speed1:= 1;
+  floor.fallspeed:= 5;
   end;
-  if (floor.fallcounter = 20) then
+  if (floor.fallcounter = 40) then
   begin
   crane.speed:= 2;
   floor.speed:= 6;
-  floor.speed1:= 2;
   end;
   label2.Caption:='Жизни: '+IntToStr(floor.lifecounter);
   label1.Caption:='Счёт: '+IntToStr(floor.fallcounter+floor.combocounter);
@@ -381,76 +399,73 @@ begin
   begin
   floor.falldown:= False;
   floor.fall:= False;
-  BGRAGraphicControl2.DiscardBitmap;
-  floor.X1:= floor.X;
-  floor.Y1:= floor.Y;
   end;
   // Первый этаж
   if (floor.fallcounter mod 2 = 1) and (floor.Y>=floor.Y1-floor.heightfloor) and (floor.fallcounter <> 0) and (floor.fallcounter <> 1)  then
   begin
   floor.falldown:= False;
   floor.fall:= False;
-  BGRAGraphicControl2.DiscardBitmap;
-  floor.X1:= floor.X;
-  floor.Y1:= floor.Y;
   end;
   // Второй этаж
   if (floor.fallcounter mod 2 = 0) and (floor.Y>=floor.Y1-floor.heightfloor) and (floor.fallcounter <> 0) and (floor.fallcounter <> 1) then
   begin
   floor.falldown:= False;
   floor.fall:= False;
-  BGRAGraphicControl3.DiscardBitmap;
-  floor.X1:= floor.X;
-  floor.Y1:= floor.Y;
   end;
 end;
 
 procedure TForm1.Timer4Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter=1) and (floor.wrongfall=false) and (floor.fall=false) then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter=1) and (floor.wrongfall=false) and (floor.fall=false)  then
   begin
   floor.dublicate1:= True;
   floor.shift:= 95;
   floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-96;
+  floor.heightfloor:= copyfloorImage1.Height-95;
   BGRAGraphicControl2.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer5.Enabled := True;
   Timer4.Enabled := False;
+  floor.X1:= floor.X;
+  floor.Y1:= floor.Y;
   end;
   end;
 
 procedure TForm1.Timer5Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.fall=false)  then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.fall=false) and (floor.Y>=floor.Y1-floor.heightfloor)  then
   begin
   floor.dublicate2:= True;
   floor.dublicate1:=false;
   BGRAGraphicControl2.DiscardBitmap;
   floor.shift2:=copyfloorImage1.Height;
   floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-122;
+  floor.heightfloor:= copyfloorImage1.Height-125;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer5.Enabled := False;
   Timer6.Enabled := True;
+  floor.X1:= floor.X;
+  floor.Y1:= floor.Y;
   end;
 end;
 
 procedure TForm1.Timer6Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) and (floor.fall=false) then
+  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) and (floor.fall=false) and (floor.Y>=floor.Y1-floor.heightfloor) then
   begin
   floor.dublicate1:=True;
   floor.dublicate2:= False;
   BGRAGraphicControl2.DiscardBitmap;
   floor.shift:=copyfloorImage1.Height;
   floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-122;
+  floor.heightfloor:= copyfloorImage1.Height-125;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer6.Enabled := False;
   Timer5.Enabled := True;
+  floor.X1:= floor.X;
+  floor.Y1:= floor.Y;
   end;
   end;
 

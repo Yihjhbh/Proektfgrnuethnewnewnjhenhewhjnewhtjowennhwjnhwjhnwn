@@ -6,20 +6,20 @@ interface
 
 uses
   Windows, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ActnList, Buttons;
+  StdCtrls, ActnList, Buttons, ExtCtrls;
 
 type
 
   { TForm2 }
 
   TForm2 = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
-    Label1: TLabel;
-    procedure BitBtn1Click(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
+    Image1: TImage;
+    Image3: TImage;
+    Image4: TImage;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure Image3Click(Sender: TObject);
+    procedure Image4Click(Sender: TObject);
   private
 
   public
@@ -35,11 +35,6 @@ uses umain, unit2;
 
 { TForm2 }
 
-procedure TForm2.BitBtn2Click(Sender: TObject);
-begin
-  form3.Close;
-end;
-
 procedure TForm2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction := caNone;
@@ -50,15 +45,22 @@ begin
   BorderIcons:=BorderIcons-[bimaximize];
 end;
 
-procedure TForm2.BitBtn1Click(Sender: TObject);
+procedure TForm2.Image3Click(Sender: TObject);
+begin
+  form3.Close;
+end;
+
+procedure TForm2.Image4Click(Sender: TObject);
 begin
   Form2.close;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
+  Form1.ShowModal;
   Form1.Show;
   Form2.Hide;
   floor.shift1:=0;
 end;
+
 
 end.
 

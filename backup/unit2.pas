@@ -5,19 +5,20 @@ unit Unit2;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Buttons, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Buttons, StdCtrls,
+  ExtCtrls;
 
 type
 
   { TForm3 }
 
   TForm3 = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
-    Label1: TLabel;
-    procedure BitBtn1Click(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
     procedure FormCreate(Sender: TObject);
+    procedure Image2Click(Sender: TObject);
+    procedure Image3Click(Sender: TObject);
   private
 
   public
@@ -33,22 +34,23 @@ uses umain;
 
 { TForm3 }
 
-procedure TForm3.BitBtn1Click(Sender: TObject);
+procedure TForm3.FormCreate(Sender: TObject);
 begin
+  BorderIcons:=BorderIcons-[bimaximize];
+end;
+
+procedure TForm3.Image2Click(Sender: TObject);
+begin
+  Form3.ShowModal;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
   Form1.Show;
   Form3.Hide;
 end;
 
-procedure TForm3.BitBtn2Click(Sender: TObject);
+procedure TForm3.Image3Click(Sender: TObject);
 begin
   Form3.close;
-end;
-
-procedure TForm3.FormCreate(Sender: TObject);
-begin
-  BorderIcons:=BorderIcons-[bimaximize];
 end;
 
 end.

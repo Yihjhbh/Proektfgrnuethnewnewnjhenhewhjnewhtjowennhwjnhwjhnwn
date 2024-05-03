@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 160
+  Left = 1127
   Height = 833
-  Top = 116
+  Top = 26
   Width = 543
   BorderStyle = bsSingle
   Caption = 'Sky Scraper'
@@ -145,6 +145,7 @@ object Form1: TForm1
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
+  KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -227,8 +228,8 @@ object Form1: TForm1
     Left = 96
     Height = 28
     Top = 488
-    Width = 143
-    Caption = 'Прекрасно!  +2'
+    Width = 133
+    Caption = 'Идеально!  +2'
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clBlack
     Font.Height = -20

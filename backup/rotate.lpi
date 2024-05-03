@@ -8,6 +8,7 @@
         <CompatibilityMode Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
+      <AutoCreateForms Value="False"/>
       <Title Value="Sky Scraper"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>

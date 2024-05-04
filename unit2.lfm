@@ -3,6 +3,7 @@ object Form3: TForm3
   Height = 833
   Top = 26
   Width = 543
+  BorderStyle = bsSingle
   Caption = 'Sky Scraper'
   ClientHeight = 833
   ClientWidth = 543

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Buttons, StdCtrls,
-  ExtCtrls;
+  ExtCtrls, MMSystem;
 
 type
 
@@ -37,15 +37,16 @@ uses umain;
 procedure TForm3.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
+  PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
 end;
 
 procedure TForm3.Image2Click(Sender: TObject);
 begin
-  Form3.ShowModal;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
   Form1.Show;
   Form3.Hide;
+  PlaySound('sound/sound_press_button',0,SND_ASYNC);
 end;
 
 procedure TForm3.Image3Click(Sender: TObject);

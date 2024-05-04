@@ -55,7 +55,6 @@ begin
   Form2.close;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
-  Form1.ShowModal;
   Form1.Show;
   Form2.Hide;
   floor.shift1:=0;

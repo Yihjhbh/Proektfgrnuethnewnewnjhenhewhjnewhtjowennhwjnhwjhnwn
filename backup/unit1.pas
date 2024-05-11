@@ -16,6 +16,10 @@ type
     Image1: TImage;
     Image3: TImage;
     Image4: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure Image3Click(Sender: TObject);
@@ -43,6 +47,7 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
+  label2.Caption:= 'Количество очков: ' + inttostr(floor.maxcounter);
 end;
 
 procedure TForm2.Image3Click(Sender: TObject);
@@ -55,7 +60,6 @@ begin
   Form2.close;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
-  Form1.ShowModal;
   Form1.Show;
   Form2.Hide;
   floor.shift1:=0;

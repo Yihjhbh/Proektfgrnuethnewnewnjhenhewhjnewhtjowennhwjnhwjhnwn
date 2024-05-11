@@ -16,9 +16,13 @@ type
     Image1: TImage;
     Image2: TImage;
     Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
     procedure FormCreate(Sender: TObject);
     procedure Image2Click(Sender: TObject);
     procedure Image3Click(Sender: TObject);
+    procedure Image4Click(Sender: TObject);
+    procedure Image5Click(Sender: TObject);
   private
 
   public
@@ -55,5 +59,18 @@ begin
   Form3.close;
 end;
 
+procedure TForm3.Image4Click(Sender: TObject);
+begin
+  PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
+  Image4.Visible:=False;
+  Image5.Visible:=True;
+end;
+
+procedure TForm3.Image5Click(Sender: TObject);
+begin
+  PlaySound(nil, 0, SND_PURGE);
+  Image5.Visible:=False;
+  Image4.Visible:=True;
+end;
 end.
 

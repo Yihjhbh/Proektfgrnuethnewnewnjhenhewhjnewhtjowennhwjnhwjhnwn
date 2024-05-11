@@ -13,9 +13,9 @@ object Form2: TForm2
   Position = poDesktopCenter
   LCLVersion = '3.0.0.3'
   object Image1: TImage
-    Left = 0
+    Left = -1
     Height = 423
-    Top = 0
+    Top = -1
     Width = 663
     Picture.Data = {
       1754506F727461626C654E6574776F726B47726170686963A9A1010089504E47
@@ -3363,6 +3363,20 @@ object Form2: TForm2
       44AE426082
     }
   end
+  object Label4: TLabel
+    Left = 193
+    Height = 80
+    Top = 53
+    Width = 296
+    Caption = 'РЕЗУЛЬТАТЫ'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Color = clBlack
+    Font.Height = -60
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
   object Image3: TImage
     Cursor = crHandPoint
     Left = 392
@@ -3748,5 +3762,47 @@ object Form2: TForm2
       B553CF5F1B43AC9517DC1A46DE6BFF7F30E67F616A125B3C0000000049454E44
       AE426082
     }
+  end
+  object Label1: TLabel
+    Left = 192
+    Height = 80
+    Top = 48
+    Width = 296
+    Caption = 'РЕЗУЛЬТАТЫ'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Color = clGreen
+    Font.Height = -60
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 88
+    Height = 37
+    Top = 144
+    Width = 176
+    Caption = 'Количество очков:'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Color = clBlack
+    Font.Height = -27
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 88
+    Height = 37
+    Top = 200
+    Width = 140
+    Caption = 'Лучшее комбо:'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Color = clBlack
+    Font.Height = -27
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
   end
 end

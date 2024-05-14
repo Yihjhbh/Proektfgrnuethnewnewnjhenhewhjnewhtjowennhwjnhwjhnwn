@@ -712,6 +712,7 @@ object Form1: TForm1
     Top = 624
   end
   object Timer7: TTimer
+    Interval = 40
     OnTimer = Timer7Timer
     Left = 448
     Top = 624

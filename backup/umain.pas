@@ -12,7 +12,7 @@ uses
 type
 
   Tfloor=record
-  X, Y, X1, Y1, Y_background, Y1_background, fallcounter, shift1, shift, shift2, shift3, lifecounter, speed, fallspeed, combo, combocounter, maxcounter, maxcombo, dropdistance, heightfloor: integer;
+  X, Y, X1, Y1, Y_background, Y1_background, fallcounter, shift1, shift, lifecounter, speed, fallspeed, combo, combocounter, maxcounter, maxcombo, dropdistance, heightfloor: integer;
   fall, falldown, fallcounteractive, jobfloor, dublicate1, dublicate2, dublicate3, dublicate4, invisible, wrongfall: boolean;
   end;
 
@@ -65,11 +65,10 @@ type
     { public declarations }
     craneImage, backgroundImage, background_dayImage, background_nightImage, Copybackground_nightImage, Copybackground_dayImage, floorImage, CopyfloorImage1, CopyfloorImage2: TBGRABitmap;
     soundswitch: boolean;
-    i, m: integer;
   end;
 
 var
-  Form1: TForm1;
+ Form1: TForm1;
  floor:Tfloor;
  crane:Tcrane;
 
@@ -92,24 +91,24 @@ procedure TForm1.BGRAGraphicControl2Redraw(Sender: TObject; Bitmap: TBGRABitmap
   );
 begin
   if floor.dublicate1= true then
-  bitmap.PutImage(floor.X1, floor.Y1+floor.shift, CopyfloorImage1, dmDrawWithTransparency, 255);
+  bitmap.PutImage(floor.X1, floor.Y1, CopyfloorImage1, dmDrawWithTransparency, 255);
   end;
 
 procedure TForm1.BGRAGraphicControl3Redraw(Sender: TObject; Bitmap: TBGRABitmap
   );
 begin
   if floor.dublicate2= true then
-  bitmap.PutImage(floor.X1, floor.Y1+floor.shift2, CopyfloorImage2, dmDrawWithTransparency, 255);
+  bitmap.PutImage(floor.X1, floor.Y1, CopyfloorImage2, dmDrawWithTransparency, 255);
 end;
 
 procedure TForm1.BGRAGraphicControl6Redraw(Sender: TObject; Bitmap: TBGRABitmap
   );
 begin
   //bitmap.PutImage(Width div 2-271, Height div 2-1248+floor.shift1, background_nightImage, dmDrawWithTransparency, 255);
-  //bitmap.PutImage(Width div 2-271, Height div 2-2050+floor.shift1, Copybackground_nightImage, dmDrawWithTransparency, 255);
+  //bitmap.PutImage(Width div 2-271, floor.Y1_background+floor.shift1, Copybackground_nightImage, dmDrawWithTransparency, 255);
   bitmap.PutImage(Width div 2-271, floor.Y_background+floor.shift1, background_dayImage, dmDrawWithTransparency, 255);
   bitmap.PutImage(Width div 2-271, floor.Y1_background+floor.shift1, Copybackground_dayImage, dmDrawWithTransparency, 255);
-  bitmap.PutImage(Width div 2-271, Height div 2-418+floor.shift1, backgroundImage, dmDrawWithTransparency, 255);
+  bitmap.PutImage(Width div 2-271, Height div 2-418+floor.shift, backgroundImage, dmDrawWithTransparency, 255);
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -129,18 +128,16 @@ begin
   Copybackground_nightImage:= background_nightImage;
   Copybackground_dayImage:= background_dayImage;
 
-  floor.Y_background:= Height div 2-1248;
-  floor.Y1_background:= Height div 2-2048;
+  floor.Y_background:= Height div 2-1250;
+  floor.Y1_background:= Height div 2-2082;
   floor.X:=333;
   floor.Y:=110;
   crane.angle := 135;
-  i:=1;
   floor.lifecounter:=3;
   floor.falldown:= True;
   floor.jobfloor:= True;
   crane.jobcrane:= True;
   floor.invisible:= True;
-  floor.shift3:=90;
   label1.Caption:='Счёт: 0';
   label2.Caption:='Жизни: '+ IntToStr(floor.lifecounter);
   BorderIcons:=BorderIcons-[bimaximize];
@@ -165,21 +162,7 @@ begin
   begin
   floor.fallcounter:= floor.fallcounter+1;
   floor.fall:= True;
-  //floor.fallspeed:=18;
-
-  if floor.fallcounter=2 then
-  floor.fallspeed:=18;
-
-  if floor.fallcounter>2 then
-  begin
-  floor.dropdistance:=floor.Y1-floor.Y;
-  while i<=floor.dropdistance do
-  begin
-  if (floor.dropdistance mod i=0) and (i>=10) then
-  floor.fallspeed:=i+2;
-  i:=i+1;
-  end;
-  end;
+  floor.fallspeed:=18+floor.speed;
   end;
 end;
 
@@ -237,9 +220,9 @@ begin
   floor.wrongfall:= true;
   floor.jobfloor:= False;
   crane.jobcrane:= False;
-  floor.Y:= floor.Y+floor.fallspeed;
+  floor.Y:= floor.Y+18;
   form1.BGRAGraphicControl1.DiscardBitmap;
-  if floor.Y >= floor.Y1-10 then
+  if floor.Y >= floor.Y1-floor.heightfloor then
   begin
   floor.invisible:= false;
   floor.X:= floor.X1;
@@ -259,9 +242,8 @@ begin
   if floor.Y>= 150 then
   crane.jobcrane:= True;
   // Вычисление комбо
-  if (floor.X>= floor.X1-2) and (floor.X<= floor.X1+2) and (floor.Y>= floor.Y1-floor.shift3) then
+  if (floor.X>= floor.X1-2) and (floor.X<= floor.X1+2) and (floor.Y>= floor.Y1-floor.heightfloor) then
   begin
-  floor.shift3:=0;
   form1.label3.Visible:= True;
   floor.combo:= floor.combo+1;
   if floor.combo=1 then
@@ -272,9 +254,8 @@ begin
   floor.combocounter:= floor.combocounter+4*(floor.combo-1)-1;
   end;
   end
-  else if (floor.Y >= floor.Y1-floor.shift3) then
+  else if (floor.Y >= floor.Y1-floor.heightfloor) then
   begin
-  floor.shift3:=0;
   floor.combo:=0;
   form1.label3.Caption:='Идеально!  +2'
   end;
@@ -323,7 +304,7 @@ end;
 //------------------------ДВИЖЕНИЕ КРАНА ВПРАВО------------------------\\
 procedure TForm1.Timer2Timer(Sender: TObject);
 begin
-  form1.Caption:=inttostr(floor.Y)+', '+inttostr(floor.X)+', '+inttostr(floor.maxcounter);
+  form1.Caption:=inttostr(floor.Y)+', '+inttostr(floor.X)+', '+inttostr(floor.maxcounter)+', '+inttostr(floor.fallcounter)+', '+inttostr(floor.shift1);
   FloordropRestrictions;
   // Анимация этажа
   if floor.jobfloor = True then
@@ -367,12 +348,12 @@ begin
   floor.lifecounter:=floor.lifecounter-1;
   end;
   //Увеличение скорости качания крана
-  if (floor.fallcounter = 20) then
+  if (floor.fallcounter = 5) then
   begin
   crane.speed:= 1;
   floor.speed:= 3;
   end;
-  if (floor.fallcounter = 40) then
+  if (floor.fallcounter = 10) then
   begin
   crane.speed:= 2;
   floor.speed:= 6;
@@ -387,6 +368,7 @@ begin
   label1.Left:=412;
   if floor.lifecounter=0 then
   begin
+  maxcounter:=floor.maxcounter;
   Form1.Hide;
   Form2.Show;
   end;
@@ -424,9 +406,10 @@ begin
   if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter=1) and (floor.wrongfall=false) and (floor.fall=false)  then
   begin
   floor.dublicate1:= True;
-  floor.shift:= 95;
-  floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-95;
+  floor.Y:=709;
+  floor.shift:= floor.shift+119;
+  floor.shift1:= floor.shift1+119;
+  floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl2.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer5.Enabled := True;
@@ -439,14 +422,15 @@ begin
 //--------------------ОТРИСОВКА КОПИИ ЧЕТНЫХ ЭТАЖЕЙ--------------------\\
 procedure TForm1.Timer5Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.fall=false) and (floor.Y>=floor.Y1-floor.heightfloor)  then
+  if (crane.angle>=135) and (crane.angle<=140) and (floor.fallcounter mod 2 = 0) and (floor.wrongfall=false) and (floor.fall=false) then
   begin
   floor.dublicate2:= True;
   floor.dublicate1:=false;
   BGRAGraphicControl2.DiscardBitmap;
-  floor.shift2:=copyfloorImage1.Height;
-  floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-125;
+  floor.Y:=709;
+  floor.shift1:= floor.shift1+119;
+  floor.shift:= floor.shift+119;
+  floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer5.Enabled := False;
@@ -459,14 +443,15 @@ end;
 //--------------------ОТРИСОВКА КОПИИ НЕЧЕТНЫХ ЭТАЖЕЙ--------------------\\
 procedure TForm1.Timer6Timer(Sender: TObject);
 begin
-  if (crane.angle>=135) and (crane.angle<=136) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) and (floor.fall=false) and (floor.Y>=floor.Y1-floor.heightfloor) then
+  if (crane.angle>=135) and (crane.angle<=140) and (floor.fallcounter mod 2 = 1) and (floor.wrongfall=false) and (floor.fall=false) then
   begin
   floor.dublicate1:=True;
   floor.dublicate2:= False;
   BGRAGraphicControl2.DiscardBitmap;
-  floor.shift:=copyfloorImage1.Height;
-  floor.shift1:= floor.shift1+95;
-  floor.heightfloor:= copyfloorImage1.Height-125;
+  floor.Y:=709;
+  floor.shift1:= floor.shift1+119;
+  floor.shift:= floor.shift+119;
+  floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
   Timer6.Enabled := False;
@@ -478,10 +463,16 @@ begin
 
 procedure TForm1.Timer7Timer(Sender: TObject);
 begin
-  if floor.Y1_background= Height div 2-1248 then
-  floor.Y_background:= Height div 2-2048;
-  if floor.Y_background= Height div 2-1248 then
-  floor.Y1_background:= Height div 2-2048;
+  if (floor.shift1 = 1666) or (floor.shift1 = 833) then
+  begin
+  floor.shift1:=0;
+  floor.Y_background:= Height div 2-418;
+  floor.Y1_background:= Height div 2-1250;
+  BGRAGraphicControl6.DiscardBitmap;
+  end;
+
+  if (floor.Y1-floor.heightfloor)-floor.Y< 18 then
+  floor.fallspeed:=(floor.Y1-floor.heightfloor div 2)-(floor.Y+floor.heightfloor div 2);
 end;
 
  end.

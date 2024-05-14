@@ -27,7 +27,7 @@ type
   private
 
   public
-
+  maxcounter:integer;
   end;
 
 var
@@ -47,7 +47,7 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
-  label2.Caption:= 'Количество очков: ' + inttostr(floor.maxcounter);
+  label2.Caption:= 'Количество очков: ' + inttostr(maxcounter);
 end;
 
 procedure TForm2.Image3Click(Sender: TObject);

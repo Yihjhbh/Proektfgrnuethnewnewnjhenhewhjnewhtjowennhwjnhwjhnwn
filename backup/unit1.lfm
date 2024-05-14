@@ -3770,7 +3770,7 @@ object Form2: TForm2
     Width = 296
     Caption = 'РЕЗУЛЬТАТЫ'
     Font.CharSet = RUSSIAN_CHARSET
-    Font.Color = clGreen
+    Font.Color = clTeal
     Font.Height = -60
     Font.Name = 'Architun'
     Font.Pitch = fpVariable

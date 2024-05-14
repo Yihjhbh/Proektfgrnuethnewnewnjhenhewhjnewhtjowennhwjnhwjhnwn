@@ -32,6 +32,7 @@ type
 
 var
   Form2: TForm2;
+  maxcounter:integer;
 
 implementation
 uses umain, unit2;
@@ -47,7 +48,7 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
-  label2.Caption:= 'Количество очков: ' + inttostr(floor.maxcounter);
+  label2.Caption:= 'Количество очков: ' + inttostr(maxcounter);
 end;
 
 procedure TForm2.Image3Click(Sender: TObject);

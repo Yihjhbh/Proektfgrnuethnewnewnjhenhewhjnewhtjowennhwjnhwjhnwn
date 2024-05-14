@@ -47,9 +47,9 @@ end;
 procedure TForm3.Image2Click(Sender: TObject);
 begin
   Form1.Free;
-  Application.CreateForm(TForm1, Form1);
   Form1.Show;
   Form3.Hide;
+  Application.CreateForm(TForm1, Form1);
   PlaySound('sound/sound_press_button',0,SND_ASYNC);
   Form1.soundswitch:=True;
 end;

@@ -27,11 +27,12 @@ type
   private
 
   public
-  maxcounter:integer;
+
   end;
 
 var
   Form2: TForm2;
+  maxcounter:integer;
 
 implementation
 uses umain, unit2;

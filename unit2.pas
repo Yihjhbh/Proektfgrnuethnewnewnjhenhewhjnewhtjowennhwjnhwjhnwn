@@ -13,16 +13,16 @@ type
   { TForm3 }
 
   TForm3 = class(TForm)
-    Image1: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Image5: TImage;
+    Image_Background: TImage;
+    Image_Start: TImage;
+    Image_Exit: TImage;
+    Image_Unmute: TImage;
+    Image_Mute: TImage;
     procedure FormCreate(Sender: TObject);
-    procedure Image2Click(Sender: TObject);
-    procedure Image3Click(Sender: TObject);
-    procedure Image4Click(Sender: TObject);
-    procedure Image5Click(Sender: TObject);
+    procedure Image_StartClick(Sender: TObject);
+    procedure Image_ExitClick(Sender: TObject);
+    procedure Image_UnmuteClick(Sender: TObject);
+    procedure Image_MuteClick(Sender: TObject);
   private
 
   public
@@ -44,7 +44,7 @@ begin
   PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
 end;
 
-procedure TForm3.Image2Click(Sender: TObject);
+procedure TForm3.Image_StartClick(Sender: TObject);
 begin
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
@@ -54,23 +54,23 @@ begin
   Form1.soundswitch:=True;
 end;
 
-procedure TForm3.Image3Click(Sender: TObject);
+procedure TForm3.Image_ExitClick(Sender: TObject);
 begin
   Form3.close;
 end;
 
-procedure TForm3.Image4Click(Sender: TObject);
+procedure TForm3.Image_UnmuteClick(Sender: TObject);
 begin
   PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
-  Image4.Visible:=False;
-  Image5.Visible:=True;
+  Image_Unmute.Visible:=False;
+  Image_Mute.Visible:=True;
 end;
 
-procedure TForm3.Image5Click(Sender: TObject);
+procedure TForm3.Image_MuteClick(Sender: TObject);
 begin
   PlaySound(nil, 0, SND_PURGE);
-  Image5.Visible:=False;
-  Image4.Visible:=True;
+  Image_Mute.Visible:=False;
+  Image_Unmute.Visible:=True;
 end;
 end.
 

@@ -12,7 +12,7 @@ object Form2: TForm2
   OnCreate = FormCreate
   Position = poDesktopCenter
   LCLVersion = '3.0.0.3'
-  object Image1: TImage
+  object Image_Background: TImage
     Left = -1
     Height = 423
     Top = -1
@@ -3363,7 +3363,7 @@ object Form2: TForm2
       44AE426082
     }
   end
-  object Label4: TLabel
+  object Label_Result: TLabel
     Left = 193
     Height = 80
     Top = 53
@@ -3377,13 +3377,13 @@ object Form2: TForm2
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object Image3: TImage
+  object Image_Exit: TImage
     Cursor = crHandPoint
     Left = 392
     Height = 70
     Top = 288
     Width = 200
-    OnClick = Image3Click
+    OnClick = Image_ExitClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B477261706869631316000089504E47
       0D0A1A0A0000000D49484452000000C800000046080600000089E2DB36000000
@@ -3565,13 +3565,13 @@ object Form2: TForm2
       B04FF10000000049454E44AE426082
     }
   end
-  object Image4: TImage
+  object Image_Again: TImage
     Cursor = crHandPoint
     Left = 72
     Height = 70
     Top = 288
     Width = 200
-    OnClick = Image4Click
+    OnClick = Image_AgainClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B477261706869634817000089504E47
       0D0A1A0A0000000D49484452000000C800000046080600000089E2DB36000000
@@ -3763,7 +3763,7 @@ object Form2: TForm2
       AE426082
     }
   end
-  object Label1: TLabel
+  object Label_Result1: TLabel
     Left = 192
     Height = 80
     Top = 48
@@ -3777,7 +3777,7 @@ object Form2: TForm2
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object Label2: TLabel
+  object Label_MaxPoint: TLabel
     Left = 88
     Height = 37
     Top = 144
@@ -3791,7 +3791,7 @@ object Form2: TForm2
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object Label3: TLabel
+  object Label_MaxCombo: TLabel
     Left = 88
     Height = 37
     Top = 200

@@ -13,17 +13,17 @@ type
   { TForm2 }
 
   TForm2 = class(TForm)
-    Image1: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    Image_Background: TImage;
+    Image_Exit: TImage;
+    Image_Again: TImage;
+    Label_Result1: TLabel;
+    Label_MaxPoint: TLabel;
+    Label_MaxCombo: TLabel;
+    Label_Result: TLabel;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    procedure Image3Click(Sender: TObject);
-    procedure Image4Click(Sender: TObject);
+    procedure Image_ExitClick(Sender: TObject);
+    procedure Image_AgainClick(Sender: TObject);
   private
 
   public
@@ -48,15 +48,15 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
-  label2.Caption:= 'Количество очков: ' + inttostr(maxcounter);
+  Label_MaxPoint.Caption:= 'Количество очков: ' + inttostr(maxcounter);
 end;
 
-procedure TForm2.Image3Click(Sender: TObject);
+procedure TForm2.Image_ExitClick(Sender: TObject);
 begin
   form3.Close;
 end;
 
-procedure TForm2.Image4Click(Sender: TObject);
+procedure TForm2.Image_AgainClick(Sender: TObject);
 begin
   Form2.close;
   Form1.Free;

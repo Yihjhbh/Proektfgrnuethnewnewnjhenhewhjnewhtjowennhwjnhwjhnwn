@@ -11,7 +11,7 @@ object Form3: TForm3
   OnCreate = FormCreate
   Position = poDesktopCenter
   LCLVersion = '3.0.0.3'
-  object Image1: TImage
+  object Image_Background: TImage
     Left = 0
     Height = 834
     Top = 0
@@ -11641,13 +11641,13 @@ object Form3: TForm3
       0049454E44AE426082
     }
   end
-  object Image2: TImage
+  object Image_Start: TImage
     Cursor = crHandPoint
     Left = 40
     Height = 70
     Top = 624
     Width = 200
-    OnClick = Image2Click
+    OnClick = Image_StartClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B477261706869632A13000089504E47
       0D0A1A0A0000000D49484452000000C800000046080600000089E2DB36000000
@@ -11806,13 +11806,13 @@ object Form3: TForm3
       4E44AE426082
     }
   end
-  object Image3: TImage
+  object Image_Exit: TImage
     Cursor = crHandPoint
     Left = 304
     Height = 70
     Top = 624
     Width = 200
-    OnClick = Image3Click
+    OnClick = Image_ExitClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B477261706869631316000089504E47
       0D0A1A0A0000000D49484452000000C800000046080600000089E2DB36000000
@@ -11994,13 +11994,13 @@ object Form3: TForm3
       B04FF10000000049454E44AE426082
     }
   end
-  object Image4: TImage
+  object Image_Unmute: TImage
     Cursor = crHandPoint
     Left = 248
     Height = 58
     Top = 544
     Width = 64
-    OnClick = Image4Click
+    OnClick = Image_UnmuteClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B47726170686963B111000089504E47
       0D0A1A0A0000000D49484452000000330000003308060000003AA1302A000000
@@ -12148,13 +12148,13 @@ object Form3: TForm3
     }
     Visible = False
   end
-  object Image5: TImage
+  object Image_Mute: TImage
     Cursor = crHandPoint
     Left = 248
     Height = 56
     Top = 544
     Width = 56
-    OnClick = Image5Click
+    OnClick = Image_MuteClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B477261706869639E12000089504E47
       0D0A1A0A0000000D49484452000000330000003308060000003AA1302A000000

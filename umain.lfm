@@ -150,6 +150,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   Position = poDesktopCenter
   LCLVersion = '3.0.0.3'
   object BGRAGraphicControl6: TBGRAGraphicControl
@@ -676,8 +677,8 @@ object Form1: TForm1
   object Timer1: TTimer
     Interval = 40
     OnTimer = Timer1Timer
-    Left = 112
-    Top = 624
+    Left = 168
+    Top = 560
   end
   object Timer2: TTimer
     Enabled = False
@@ -714,8 +715,8 @@ object Form1: TForm1
   object Timer7: TTimer
     Interval = 40
     OnTimer = Timer7Timer
-    Left = 448
-    Top = 624
+    Left = 336
+    Top = 560
   end
   object Timer8: TTimer
     Interval = 700

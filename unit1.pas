@@ -20,10 +20,12 @@ type
     Label_MaxPoint: TLabel;
     Label_MaxCombo: TLabel;
     Label_Result: TLabel;
+    Timer1: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure Image_ExitClick(Sender: TObject);
     procedure Image_AgainClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
 
   public
@@ -32,7 +34,6 @@ type
 
 var
   Form2: TForm2;
-  maxcounter:integer;
 
 implementation
 uses umain, unit2;
@@ -48,7 +49,6 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons:=BorderIcons-[bimaximize];
-  Label_MaxPoint.Caption:= 'Количество очков: ' + inttostr(maxcounter);
 end;
 
 procedure TForm2.Image_ExitClick(Sender: TObject);
@@ -64,6 +64,12 @@ begin
   Form1.Show;
   Form2.Hide;
   floor.shift1:=0;
+end;
+
+procedure TForm2.Timer1Timer(Sender: TObject);
+begin
+  Label_MaxPoint.Caption:= 'Количество очков: ' + inttostr(maxcounter);
+  Label_MaxCombo.Caption:= 'Лучшее комбо: X' + inttostr(maxcombo-1);
 end;
 
 

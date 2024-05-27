@@ -12,7 +12,7 @@ uses
 type
 
   Tfloor=record
-  X, Y, X1, Y1, Y_background, Y1_background, fallcounter, shift1, shift, lifecounter, speed, fallspeed, combo, combocounter, maxcounter, maxcombo, dropdistance, heightfloor: integer;
+  X, Y, X1, Y1, Y_background, Y1_background, fallcounter, shift1, shift, lifecounter, speed, fallspeed, fallboost , combo, combocounter, dropdistance, heightfloor: integer;
   fall, falldown, fallcounteractive, jobfloor, dublicate1, dublicate2, dublicate3, dublicate4, invisible, wrongfall: boolean;
   end;
 
@@ -52,6 +52,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure Image_UnmuteClick(Sender: TObject);
     procedure Image_MuteClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -68,13 +69,14 @@ type
   public
     { public declarations }
     craneImage, backgroundImage, background_dayImage, background_nightImage, Copybackground_nightImage, Copybackground_dayImage, floorImage, CopyfloorImage1, CopyfloorImage2: TBGRABitmap;
-    soundswitch: boolean;
+    soundswitch, nighton, keyuping, stopkey: boolean;
   end;
 
 var
  Form1: TForm1;
  floor:Tfloor;
  crane:Tcrane;
+ maxcounter, maxcombo: integer;
 
 implementation
 uses unit1, unit2;
@@ -108,10 +110,16 @@ end;
 procedure TForm1.BGRAGraphicControl6Redraw(Sender: TObject; Bitmap: TBGRABitmap
   );
 begin
-  //bitmap.PutImage(Width div 2-271, Height div 2-1248+floor.shift1, background_nightImage, dmDrawWithTransparency, 255);
-  //bitmap.PutImage(Width div 2-271, floor.Y1_background+floor.shift1, Copybackground_nightImage, dmDrawWithTransparency, 255);
+  if nighton= False then
+  begin
   bitmap.PutImage(Width div 2-271, floor.Y_background+floor.shift1, background_dayImage, dmDrawWithTransparency, 255);
   bitmap.PutImage(Width div 2-271, floor.Y1_background+floor.shift1, Copybackground_dayImage, dmDrawWithTransparency, 255);
+  end;
+  if nighton= True then
+  begin
+  bitmap.PutImage(Width div 2-271, floor.Y_background+floor.shift1, background_nightImage, dmDrawWithTransparency, 255);
+  bitmap.PutImage(Width div 2-271, floor.Y1_background+floor.shift1, Copybackground_nightImage, dmDrawWithTransparency, 255);
+  end;
   bitmap.PutImage(Width div 2-271, Height div 2-418+floor.shift, backgroundImage, dmDrawWithTransparency, 255);
 end;
 
@@ -138,6 +146,7 @@ begin
   floor.Y:=110;
   crane.angle := 135;
   floor.lifecounter:=3;
+  maxcombo:= -10000;
   floor.falldown:= True;
   floor.jobfloor:= True;
   crane.jobcrane:= True;
@@ -162,12 +171,27 @@ end;
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
-  if (key=VK_Space) and (floor.fall=false) and (floor.jobfloor=true) then
+  if (key=VK_Space) and (floor.jobfloor=False) then
   begin
+  keyuping:= False;
+  stopkey:=True;
+  end;
+  if (key=VK_Space) and (floor.jobfloor=true) and (floor.fall=false) and (stopkey=False) then
+  keyuping:= True;
+  if keyuping=True then
+  begin
+  floor.fallspeed:=18+floor.fallboost;
   floor.fallcounter:= floor.fallcounter+1;
   floor.fall:= True;
-  floor.fallspeed:=18+floor.speed;
+  keyuping:=False;
   end;
+end;
+
+procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (key=VK_Space) then
+  keyuping:=True;
+  stopkey:=False;
 end;
 
 //-----------------------КНОПКА ВЫКЛЮЧЕНИЯ МУЗЫКИ----------------------\\
@@ -252,6 +276,8 @@ begin
   form1.Label_Combo.Top:= floor.Y-100;
   form1.label_Combo.Visible:= True;
   floor.combo:= floor.combo+1;
+  if maxcombo < floor.combo then
+  maxcombo:= floor.combo;
   if floor.combo=1 then
   floor.combocounter:= floor.combocounter+1;
   if floor.combo> 1 then
@@ -271,6 +297,7 @@ end;
 //-------------------------ДВИЖЕНИЕ КРАНА ВЛЕВО-------------------------\\
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
+  form1.Caption:=inttostr(floor.Y)+', '+inttostr((floor.Y1-floor.heightfloor)-floor.Y)+', '+inttostr(floor.Y1)+', '+inttostr(floor.fallspeed);
   FloordropRestrictions;
   if (floor.Y=110) and (floor.X=333) then
   floor.jobfloor:= True;
@@ -278,7 +305,7 @@ begin
   if floor.jobfloor= True then
   begin
   floor.invisible:= true;
-  if (crane.angle>=135) and (crane.angle<=158)then
+  if ((crane.angle>=135) or (crane.angle>=145)) and (crane.angle<=158)then
   begin
   floor.X:=floor.X-3-floor.speed;
   floor.Y:=floor.Y+1+crane.speed;
@@ -310,7 +337,7 @@ end;
 //------------------------ДВИЖЕНИЕ КРАНА ВПРАВО------------------------\\
 procedure TForm1.Timer2Timer(Sender: TObject);
 begin
-  //form1.Caption:=inttostr(floor.Y)+', '+inttostr(floor.X)+', '+inttostr(floor.maxcounter)+', '+inttostr(floor.fallcounter)+', '+inttostr(floor.shift1);
+  form1.Caption:=inttostr(floor.Y)+', '+inttostr((floor.Y1-floor.heightfloor)-floor.Y)+', '+inttostr(floor.Y1)+', '+inttostr(floor.fallspeed);
   FloordropRestrictions;
   // Анимация этажа
   if floor.jobfloor = True then
@@ -323,7 +350,7 @@ begin
   end;
   if (crane.angle<=202) and (crane.angle>=158) then
   floor.X:=floor.X+3+floor.speed;
-  if (crane.angle<=158) and (crane.angle>=135) then
+  if (crane.angle<=158) and ((crane.angle>=135) or (crane.angle>=145)) then
   begin
   floor.X:=floor.X+3+floor.speed;
   floor.Y:=floor.Y-1-crane.speed;
@@ -354,37 +381,42 @@ begin
   floor.lifecounter:=floor.lifecounter-1;
   end;
   //Увеличение скорости качания крана
-  if (floor.fallcounter = 10) then
+  if floor.fallcounter = 3 then
   begin
   crane.speed:= 1;
   floor.speed:= 3;
+  floor.fallboost:=10;
   end;
-  if (floor.fallcounter = 20) then
+  if floor.fallcounter = 6 then
   begin
   crane.speed:= 2;
   floor.speed:= 6;
+  floor.fallboost:=20;
   end;
-  if (floor.fallcounter = 40) then
+  if floor.fallcounter = 9 then
   begin
   crane.speed:= 4;
   floor.speed:= 12;
+  floor.fallboost:=30;
   end;
-  if (floor.fallcounter = 60) then
+  if floor.fallcounter = 12 then
   begin
+  nighton:= True;
+  BGRAGraphicControl6.DiscardBitmap;
   crane.speed:= 8;
   floor.speed:= 24;
+  floor.fallboost:=40;
   end;
   //Подсчет жизней и очков
   Label_Life.Caption:='Жизни: '+IntToStr(floor.lifecounter);
-  Label_Point.Caption:='Счёт: '+IntToStr(floor.fallcounter+floor.combocounter);
-  floor.maxcounter:=floor.fallcounter+floor.combocounter;
-  if floor.maxcounter>= 10 then
-  Label_Point.Left:=416;
-  if floor.maxcounter>= 100 then
-  Label_Point.Left:=412;
+  maxcounter:=floor.fallcounter+floor.combocounter;
+  Label_Point.Caption:='Счёт: '+IntToStr(maxcounter);
+  if maxcounter>= 10 then
+  Label_Point.Left:=414;
+  if maxcounter>= 100 then
+  Label_Point.Left:=408;
   if floor.lifecounter=0 then
   begin
-  maxcounter:=floor.maxcounter;
   Form1.Hide;
   Form2.Show;
   end;
@@ -402,6 +434,7 @@ begin
   PlaySound('sound/sound_background',0,SND_ASYNC or SND_LOOP);
   soundswitch:= False;
   end;
+
   if (floor.fallcounter = 1) and (floor.Y>=600) then
   begin
   floor.fall:= False;
@@ -425,6 +458,7 @@ begin
   floor.Y:=709;
   floor.shift:= floor.shift+119;
   floor.shift1:= floor.shift1+119;
+  floor.fall:= False;
   floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl2.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
@@ -446,6 +480,7 @@ begin
   floor.Y:=709;
   floor.shift1:= floor.shift1+119;
   floor.shift:= floor.shift+119;
+  floor.fall:= False;
   floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
@@ -467,6 +502,7 @@ begin
   floor.Y:=709;
   floor.shift1:= floor.shift1+119;
   floor.shift:= floor.shift+119;
+  floor.fall:= False;
   floor.heightfloor:= copyfloorImage1.Height;
   BGRAGraphicControl3.DiscardBitmap;
   BGRAGraphicControl6.DiscardBitmap;
@@ -480,15 +516,15 @@ begin
 procedure TForm1.Timer7Timer(Sender: TObject);
 begin
   if (floor.shift1 = 1666) or (floor.shift1 = 833) then
-  begin
+  begin;
   floor.shift1:=0;
   floor.Y_background:= Height div 2-418;
   floor.Y1_background:= Height div 2-1250;
   BGRAGraphicControl6.DiscardBitmap;
   end;
 
-  if (floor.Y1-floor.heightfloor div 2)-(floor.Y+floor.heightfloor div 2) < 18+floor.speed then
-  floor.fallspeed:=(floor.Y1-floor.heightfloor div 2)-(floor.Y+floor.heightfloor div 2);
+  if ((floor.Y1-floor.heightfloor)-floor.Y < floor.fallspeed) and (floor.fallcounter>1) then
+  floor.fallspeed:=(floor.Y1-floor.heightfloor)-floor.Y+2;
 end;
 
 //------------------------АНИМАЦИЯ СЧЕТЧИКА КОМБО------------------------\\

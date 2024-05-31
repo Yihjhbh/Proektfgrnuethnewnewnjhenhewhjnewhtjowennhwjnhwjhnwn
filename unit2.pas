@@ -33,15 +33,16 @@ var
   Form3: TForm3;
 
 implementation
-uses umain;
-{$R *.lfm}
 
-{ TForm3 }
+uses umain;
+  {$R *.lfm}
+
+  { TForm3 }
 
 procedure TForm3.FormCreate(Sender: TObject);
 begin
-  BorderIcons:=BorderIcons-[bimaximize];
-  PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
+  BorderIcons := BorderIcons - [bimaximize];
+  PlaySound('sound/sound_menu', 0, SND_ASYNC or SND_LOOP);
 end;
 
 procedure TForm3.Image_StartClick(Sender: TObject);
@@ -50,27 +51,29 @@ begin
   Application.CreateForm(TForm1, Form1);
   Form1.Show;
   Form3.Hide;
-  PlaySound('sound/sound_press_button',0,SND_ASYNC);
-  Form1.soundswitch:=True;
+  PlaySound('sound/sound_press_button', 0, SND_ASYNC);
+  Form1.soundswitch := True;
+  Form1.Image_Mute.Visible := Image_Unmute.Visible;
+  Form1.Image_Unmute.Visible := Image_Mute.Visible;
 end;
 
 procedure TForm3.Image_ExitClick(Sender: TObject);
 begin
-  Form3.close;
+  Form3.Close;
 end;
 
 procedure TForm3.Image_UnmuteClick(Sender: TObject);
 begin
-  PlaySound('sound/sound_menu',0,SND_ASYNC or SND_LOOP);
-  Image_Unmute.Visible:=False;
-  Image_Mute.Visible:=True;
+  PlaySound('sound/sound_menu', 0, SND_ASYNC or SND_LOOP);
+  Image_Unmute.Visible := False;
+  Image_Mute.Visible := True;
 end;
 
 procedure TForm3.Image_MuteClick(Sender: TObject);
 begin
   PlaySound(nil, 0, SND_PURGE);
-  Image_Mute.Visible:=False;
-  Image_Unmute.Visible:=True;
+  Image_Mute.Visible := False;
+  Image_Unmute.Visible := True;
 end;
-end.
 
+end.

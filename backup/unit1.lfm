@@ -11,6 +11,7 @@ object Form2: TForm2
   OnClose = FormClose
   OnCreate = FormCreate
   Position = poDesktopCenter
+  ShowInTaskBar = stNever
   LCLVersion = '3.0.0.3'
   object Image_Background: TImage
     Left = -1

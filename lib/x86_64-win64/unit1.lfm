@@ -1,12 +1,12 @@
 object Form2: TForm2
-  Left = 1248
-  Height = 422
-  Top = 99
-  Width = 662
+  Left = 1185
+  Height = 421
+  Top = 107
+  Width = 661
   BorderStyle = bsSingle
   Caption = 'Sky Scraper'
-  ClientHeight = 422
-  ClientWidth = 662
+  ClientHeight = 421
+  ClientWidth = 661
   DesignTimePPI = 120
   OnClose = FormClose
   OnCreate = FormCreate
@@ -3365,11 +3365,11 @@ object Form2: TForm2
     }
   end
   object Label_Result: TLabel
-    Left = 193
+    Left = 168
     Height = 80
     Top = 53
-    Width = 296
-    Caption = 'РЕЗУЛЬТАТЫ'
+    Width = 341
+    Caption = 'Вы проиграли :('
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clBlack
     Font.Height = -60
@@ -3765,11 +3765,11 @@ object Form2: TForm2
     }
   end
   object Label_Result1: TLabel
-    Left = 192
+    Left = 168
     Height = 80
     Top = 48
-    Width = 296
-    Caption = 'РЕЗУЛЬТАТЫ'
+    Width = 341
+    Caption = 'Вы проиграли :('
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clTeal
     Font.Height = -60
@@ -3781,9 +3781,9 @@ object Form2: TForm2
   object Label_MaxPoint: TLabel
     Left = 88
     Height = 37
-    Top = 144
-    Width = 176
-    Caption = 'Количество очков:'
+    Top = 160
+    Width = 104
+    Caption = 'Результат:'
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clBlack
     Font.Height = -27
@@ -3795,9 +3795,9 @@ object Form2: TForm2
   object Label_MaxCombo: TLabel
     Left = 88
     Height = 37
-    Top = 200
-    Width = 140
-    Caption = 'Лучшее комбо:'
+    Top = 208
+    Width = 65
+    Caption = 'Комбо:'
     Font.CharSet = RUSSIAN_CHARSET
     Font.Color = clBlack
     Font.Height = -27
@@ -3806,9 +3806,35 @@ object Form2: TForm2
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object Timer1: TTimer
-    OnTimer = Timer1Timer
-    Left = 388
+  object Label_BestMaxPoint: TLabel
+    Left = 312
+    Height = 37
+    Top = 160
+    Width = 181
+    Caption = 'Лучший результат:'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Height = -27
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Label_BestMaxCombo: TLabel
+    Left = 312
+    Height = 37
     Top = 208
+    Width = 140
+    Caption = 'Лучшее комбо:'
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Height = -27
+    Font.Name = 'Architun'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Timer_Record: TTimer
+    OnTimer = Timer_RecordTimer
+    Left = 312
+    Top = 296
   end
 end

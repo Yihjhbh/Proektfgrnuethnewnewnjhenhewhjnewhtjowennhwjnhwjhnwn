@@ -47,10 +47,10 @@ end;
 
 procedure TForm3.Image_StartClick(Sender: TObject);
 begin
-  Form1.Show;
-  Form3.Hide;
   Form1.Free;
   Application.CreateForm(TForm1, Form1);
+  Form1.Show;
+  Form3.Hide;
   PlaySound('sound/sound_press_button', 0, SND_ASYNC);
   Form1.soundswitch := True;
   Form1.Image_Mute.Visible := Image_Unmute.Visible;

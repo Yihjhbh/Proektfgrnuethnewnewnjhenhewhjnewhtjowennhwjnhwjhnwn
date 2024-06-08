@@ -16,6 +16,8 @@ type
     Image_Background: TImage;
     Image_Exit: TImage;
     Image_Again: TImage;
+    Label_BestMaxPoint: TLabel;
+    Label_BestMaxCombo: TLabel;
     Label_Result1: TLabel;
     Label_MaxPoint: TLabel;
     Label_MaxCombo: TLabel;
@@ -30,6 +32,7 @@ type
 
   public
     soundplay: boolean;
+    recordpoints, recordcombo: integer;
   end;
 
 var
@@ -70,12 +73,52 @@ begin
 end;
 
 procedure TForm2.Timer1Timer(Sender: TObject);
+var cache: TextFile;
+    point, combo: string;
 begin
-  Label_MaxPoint.Caption := 'Количество очков: ' + IntToStr(maxcounter);
+  if (form1.zapis = False) and (floor.lifecounter = 0) then
+  begin
+    AssignFile(cache, 'cache.txt');
+    reset(cache);
+    Readln(cache, point);
+    Read(cache, combo);
+    recordpoints := StrToInt(point);
+    recordcombo := StrToInt(combo);
+
+    if (maxcounter > recordpoints) then
+    begin
+      point := IntToStr(maxcounter);
+      rewrite(cache);
+      Writeln(cache, point);
+      Write(cache, combo);
+      label_Result.Caption := 'Новый рекорд!';
+      label_Result1.Caption := 'Новый рекорд!';
+    end;
+    if (maxcombo > recordcombo) then
+    begin
+      combo := IntToStr(maxcombo-1);
+      rewrite(cache);
+      Writeln(cache, point);
+      Write(cache, combo);
+      label_Result.Caption := 'Новый рекорд!';
+      label_Result1.Caption := 'Новый рекорд!';
+    end;
+    if (maxcombo <= recordcombo) and (maxcounter <= recordpoints) then
+    begin
+      label_Result.Caption := 'Вы проиграли :(';
+      label_Result1.Caption := 'Вы проиграли :(';
+    end;
+    closeFile(cache);
+    form1.zapis := True;
+    label_BestMaxPoint.Caption := 'Лучший результат: ' + point;
+    label_BestMaxCombo.Caption := 'Лучшее комбо: X' + combo;
+  end;
+
+  Label_MaxPoint.Caption := 'Результат: ' + IntToStr(maxcounter);
   if maxcombo < 0 then
-    Label_MaxCombo.Caption := 'Лучшее комбо: X0';
+    Label_MaxCombo.Caption := 'Комбо: X0';
   if maxcombo >= 0 then
-    Label_MaxCombo.Caption := 'Лучшее комбо: X' + IntToStr(maxcombo - 1);
+    Label_MaxCombo.Caption := 'Комбо: X' + IntToStr(maxcombo - 1);
 end;
 
 

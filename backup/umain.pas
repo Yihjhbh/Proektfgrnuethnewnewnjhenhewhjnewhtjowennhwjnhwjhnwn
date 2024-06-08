@@ -31,21 +31,20 @@ type
     BGRAGraphicControl2: TBGRAGraphicControl;
     BGRAGraphicControl3: TBGRAGraphicControl;
     BGRAGraphicControl6: TBGRAGraphicControl;
+    IdleTimer_ComboEnable: TIdleTimer;
     Image_Unmute: TImage;
     Image_Mute: TImage;
     Image_PanelUp: TImage;
     Label_Point: TLabel;
     Label_Life: TLabel;
     Label_Combo: TLabel;
-    Timer1: TTimer;
-    Timer2: TTimer;
-    Timer3: TTimer;
-    Timer4: TTimer;
-    Timer5: TTimer;
-    Timer6: TTimer;
-    Timer7: TTimer;
-    Timer8: TTimer;
-    Timer9: TTimer;
+    Timer_CraneLeft: TTimer;
+    Timer_CraneRight: TTimer;
+    Timer_Music: TTimer;
+    Timer_GroundFloor: TTimer;
+    Timer_HonestFloor: TTimer;
+    Timer_DishonestFloor: TTimer;
+    Timer_Background: TTimer;
     procedure BGRAGraphicControl1Redraw(Sender: TObject; Bitmap: TBGRABitmap);
     procedure BGRAGraphicControl2Redraw(Sender: TObject; Bitmap: TBGRABitmap);
     procedure BGRAGraphicControl3Redraw(Sender: TObject; Bitmap: TBGRABitmap);
@@ -55,25 +54,26 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure IdleTimer_ComboEnableTimer(Sender: TObject);
     procedure Image_UnmuteClick(Sender: TObject);
     procedure Image_MuteClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
-    procedure Timer3Timer(Sender: TObject);
-    procedure Timer4Timer(Sender: TObject);
-    procedure Timer5Timer(Sender: TObject);
-    procedure Timer6Timer(Sender: TObject);
-    procedure Timer7Timer(Sender: TObject);
-    procedure Timer8Timer(Sender: TObject);
-    procedure Timer9Timer(Sender: TObject);
+    procedure Timer_CraneLeftTimer(Sender: TObject);
+    procedure Timer_CraneRightTimer(Sender: TObject);
+    procedure Timer_MusicTimer(Sender: TObject);
+    procedure Timer_GroundFloorTimer(Sender: TObject);
+    procedure Timer_HonestFloorTimer(Sender: TObject);
+    procedure Timer_DishonestFloorTimer(Sender: TObject);
+    procedure Timer_BackgroundTimer(Sender: TObject);
   private
     { private declarations }
   public
     { public declarations }
     craneImage, backgroundImage, background_dayImage, background_nightImage,
     Copybackground_nightImage, Copybackground_dayImage, floorImage,
-    CopyfloorImage1, CopyfloorImage2: TBGRABitmap;
-    soundswitch, soundplay, nighton, keyuping, stopkey: boolean;
+    CopyfloorImage1, CopyfloorImage2, background_eveningImage,
+    Copybackground_eveningImage: TBGRABitmap;
+    timercombo, anglelimit: integer;
+    soundswitch, soundplay, nighton, keyuping, stopkey, evening, zapis: boolean;
   end;
 
 var
@@ -112,14 +112,21 @@ end;
 
 procedure TForm1.BGRAGraphicControl6Redraw(Sender: TObject; Bitmap: TBGRABitmap);
 begin
-  if nighton = False then
+  if (nighton = False) and (evening = False) then
   begin
     bitmap.PutImage(Width div 2 - 271, floor.Y_background + floor.shift1,
       background_dayImage, dmDrawWithTransparency, 255);
     bitmap.PutImage(Width div 2 - 271, floor.Y1_background + floor.shift1,
       Copybackground_dayImage, dmDrawWithTransparency, 255);
   end;
-  if nighton = True then
+  if (evening = True) and (nighton = False) then
+  begin
+    bitmap.PutImage(Width div 2 - 271, floor.Y_background + floor.shift1,
+      background_eveningImage, dmDrawWithTransparency, 255);
+    bitmap.PutImage(Width div 2 - 271, floor.Y1_background + floor.shift1,
+      Copybackground_eveningImage, dmDrawWithTransparency, 255);
+  end;
+  if (nighton = True) and (evening = False) then
   begin
     bitmap.PutImage(Width div 2 - 271, floor.Y_background + floor.shift1,
       background_nightImage, dmDrawWithTransparency, 255);
@@ -144,14 +151,18 @@ begin
     'image/background_day.png');
   background_nightImage := TBGRABitmap.Create(ProgramDirectory +
     'image/background_night.png');
+  background_eveningImage := TBGRABitmap.Create(ProgramDirectory +
+    'image/background_evening.png');
   CopyfloorImage1 := floorImage;
   CopyfloorImage2 := floorImage;
   Copybackground_nightImage := background_nightImage;
   Copybackground_dayImage := background_dayImage;
+  Copybackground_eveningImage:= background_eveningImage;
 
   floor.Y_background := Height div 2 - 1250;
   floor.Y1_background := Height div 2 - 2082;
   nighton := False;
+  evening := False;
   floor.fallcounter := 0;
   floor.fall := False;
   floor.dublicate1 := False;
@@ -169,6 +180,7 @@ begin
   floor.lifecounter := 3;
   floor.shift := 0;
   floor.shift1 := 0;
+  zapis:= False;
   maxcombo := -10000;
   floor.falldown := True;
   floor.jobfloor := True;
@@ -180,7 +192,6 @@ begin
   Label_Point.Caption := 'Счёт: 0';
   Label_Life.Caption := 'Жизни: ' + IntToStr(floor.lifecounter);
   BorderIcons := BorderIcons - [bimaximize];
-  Label_Combo.Font.Orientation := 500;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -190,6 +201,7 @@ begin
   background_dayImage.Free;
   backgroundImage.Free;
   background_nightImage.Free;
+  background_eveningImage.Free;
 end;
 
 //-------------СОБЫТИЯ НАЖАТИЯ КНОПОК И ИХ ОГРАНИЧЕНИЯ--------------\\
@@ -223,6 +235,13 @@ begin
   end;
 end;
 
+procedure TForm1.IdleTimer_ComboEnableTimer(Sender: TObject);
+begin
+  form1.Label_Combo.Visible:= False;
+  IdleTimer_ComboEnable.Interval:=4500;
+  IdleTimer_ComboEnable.Enabled:= True;
+end;
+
 //-----------------------КНОПКИ ВЫКЛ/ВКЛ МУЗЫКИ----------------------\\
 procedure TForm1.Image_UnmuteClick(Sender: TObject);
 begin
@@ -247,7 +266,7 @@ begin
   begin
     floor.jobfloor := False;
     crane.jobcrane := False;
-    floor.Y := floor.Y + 15;
+    floor.Y := floor.Y + 16;
     form1.BGRAGraphicControl1.DiscardBitmap;
     if floor.Y >= 600 then
       floor.fall := False;
@@ -261,7 +280,7 @@ begin
     floor.wrongfall := True;
     floor.jobfloor := False;
     crane.jobcrane := False;
-    floor.Y := floor.Y + 15;
+    floor.Y := floor.Y + 16;
     form1.BGRAGraphicControl1.DiscardBitmap;
     if floor.Y >= 580 then
     begin
@@ -310,14 +329,28 @@ begin
     if (floor.X >= floor.X1 - 2) and (floor.X <= floor.X1 + 2) and
       (floor.Y >= floor.Y1 - floor.heightfloor) then
     begin
-      form1.Label_Combo.Left := floor.X - 100;
-      form1.Label_Combo.Top := floor.Y - 100;
+      if floor.X >= 200 then
+      begin
+        form1.Label_Combo.Font.Orientation := 225;
+        form1.Label_Combo.Left := floor.X - 100;
+        form1.Label_Combo.Top := floor.Y - 125;
+      end
+      else
+      begin
+        form1.Label_Combo.Font.Orientation := -225;
+        form1.Label_Combo.Left := floor.X + 100;
+        form1.Label_Combo.Top := floor.Y - 125;
+      end;
       form1.label_Combo.Visible := True;
+      form1.IdleTimer_ComboEnable.Enabled:= True;
       floor.combo := floor.combo + 1;
       if maxcombo < floor.combo then
         maxcombo := floor.combo;
       if floor.combo = 1 then
+      begin
+        form1.label_Combo.Caption := 'Идеально!  +2';
         floor.combocounter := floor.combocounter + 1;
+      end;
       if floor.combo > 1 then
       begin
         form1.label_Combo.Caption := 'Комбо X' + IntToStr(floor.combo - 1) +
@@ -328,13 +361,14 @@ begin
     else if (floor.Y >= floor.Y1 - floor.heightfloor) then
     begin
       floor.combo := 0;
+      if form1.label_Combo.Visible = false then
       form1.label_Combo.Caption := 'Идеально!  +2';
     end;
   end;
 end;
 
 //-------------------------ДВИЖЕНИЕ КРАНА ВЛЕВО-------------------------\\
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer_CraneLeftTimer(Sender: TObject);
 begin
   FloordropRestrictions;
   if (floor.Y = 110) and (floor.X = 333) then
@@ -366,14 +400,14 @@ begin
     end;
     if crane.angle = 225 then
     begin
-      Timer1.Enabled := False;
-      Timer2.Enabled := True;
+      Timer_CraneLeft.Enabled := False;
+      Timer_CraneRight.Enabled := True;
     end;
   end;
 end;
 
 //------------------------ДВИЖЕНИЕ КРАНА ВПРАВО------------------------\\
-procedure TForm1.Timer2Timer(Sender: TObject);
+procedure TForm1.Timer_CraneRightTimer(Sender: TObject);
 begin
   FloordropRestrictions;
   // Анимация этажа
@@ -403,9 +437,8 @@ begin
     end;
     if crane.angle = 135 then
     begin
-      Timer2.Enabled := False;
-      Timer1.Enabled := True;
-      Label_Combo.Visible := False;
+      Timer_CraneRight.Enabled := False;
+      Timer_CraneLeft.Enabled := True;
       if floor.fall = False then
       begin
         floor.X := 333;
@@ -423,26 +456,46 @@ begin
           crane.speed := 1;
           floor.speed := 3;
           floor.fallboost := 20;
+          anglelimit := 5;
         end;
-        if floor.fallcounter = 6 then
+        if floor.fallcounter = 10 then
         begin
           crane.speed := 2;
           floor.speed := 6;
           floor.fallboost := 40;
+          anglelimit := 10;
         end;
-        if floor.fallcounter = 9 then
+        if floor.fallcounter = 21 then
         begin
           crane.speed := 4;
           floor.speed := 12;
           floor.fallboost := 60;
+          anglelimit := 20;
         end;
-        if floor.fallcounter = 12 then
+        if floor.fallcounter = 42 then
         begin
-          nighton := True;
-          BGRAGraphicControl6.DiscardBitmap;
           crane.speed := 8;
           floor.speed := 24;
           floor.fallboost := 80;
+          anglelimit := 34;
+        end;
+        if ((floor.fallcounter mod 77 = 0) or (floor.fallcounter mod 112 = 0) or (floor.fallcounter = 21)) and (floor.fallcounter<>0) then
+        begin
+          nighton := False;
+          evening := True;
+          BGRAGraphicControl6.DiscardBitmap;
+        end;
+        if (floor.fallcounter mod 91 = 0) and (floor.fallcounter<>0) then
+        begin
+          evening := False;
+          nighton := False;
+          BGRAGraphicControl6.DiscardBitmap;
+        end;
+        if ((floor.fallcounter mod 133 = 0) or (floor.fallcounter = 42)) and (floor.fallcounter<>0) then
+        begin
+          nighton := True;
+          evening := False;
+          BGRAGraphicControl6.DiscardBitmap;
         end;
         //Подсчет жизней и очков
         Label_Life.Caption := 'Жизни: ' + IntToStr(floor.lifecounter);
@@ -471,19 +524,20 @@ begin
 end;
 
 //-------------------------------МУЗЫКА-------------------------------\\
-procedure TForm1.Timer3Timer(Sender: TObject);
+procedure TForm1.Timer_MusicTimer(Sender: TObject);
 begin
   if (soundswitch = True) and (Form3.Image_Mute.Visible = True) then
   begin
     PlaySound('sound/sound_background', 0, SND_ASYNC or SND_LOOP);
     soundswitch := False;
   end;
+
 end;
 
 //--------------------ОТРИСОВКА КОПИИ ПЕРВОГО ЭТАЖА--------------------\\
-procedure TForm1.Timer4Timer(Sender: TObject);
+procedure TForm1.Timer_GroundFloorTimer(Sender: TObject);
 begin
-  if (crane.angle >= 135) and (crane.angle <= 136) and (floor.fallcounter = 1) and
+  if (crane.angle >= 135) and (crane.angle <= 136+anglelimit) and (floor.fallcounter = 1) and
     (floor.wrongfall = False) and (floor.fall = False) then
   begin
     floor.dublicate1 := True;
@@ -492,17 +546,17 @@ begin
     floor.shift1 := floor.shift1 + 119;
     BGRAGraphicControl2.DiscardBitmap;
     BGRAGraphicControl6.DiscardBitmap;
-    Timer5.Enabled := True;
-    Timer4.Enabled := False;
+    Timer_HonestFloor.Enabled := True;
+    Timer_GroundFloor.Enabled := False;
     floor.X1 := floor.X;
     floor.Y1 := floor.Y;
   end;
 end;
 
 //--------------------ОТРИСОВКА КОПИИ ЧЕТНЫХ ЭТАЖЕЙ--------------------\\
-procedure TForm1.Timer5Timer(Sender: TObject);
+procedure TForm1.Timer_HonestFloorTimer(Sender: TObject);
 begin
-  if (crane.angle >= 135) and (crane.angle <= 146) and (floor.fallcounter mod 2 = 0) and
+  if (crane.angle >= 100) and (crane.angle <= 136+anglelimit) and (floor.fallcounter mod 2 = 0) and
     (floor.wrongfall = False) and (floor.fall = False) and
     (floor.Y >= floor.Y1 - floor.heightfloor) then
   begin
@@ -514,17 +568,17 @@ begin
     floor.shift := floor.shift + 119;
     BGRAGraphicControl3.DiscardBitmap;
     BGRAGraphicControl6.DiscardBitmap;
-    Timer5.Enabled := False;
-    Timer6.Enabled := True;
+    Timer_HonestFloor.Enabled := False;
+    Timer_DishonestFloor.Enabled := True;
     floor.X1 := floor.X;
     floor.Y1 := floor.Y;
   end;
 end;
 
 //--------------------ОТРИСОВКА КОПИИ НЕЧЕТНЫХ ЭТАЖЕЙ--------------------\\
-procedure TForm1.Timer6Timer(Sender: TObject);
+procedure TForm1.Timer_DishonestFloorTimer(Sender: TObject);
 begin
-  if (crane.angle >= 135) and (crane.angle <= 146) and (floor.fallcounter mod 2 = 1) and
+  if (crane.angle >= 100) and (crane.angle <= 136+anglelimit) and (floor.fallcounter mod 2 = 1) and
     (floor.wrongfall = False) and (floor.fall = False) and
     (floor.Y >= floor.Y1 - floor.heightfloor) then
   begin
@@ -536,15 +590,15 @@ begin
     floor.shift := floor.shift + 119;
     BGRAGraphicControl3.DiscardBitmap;
     BGRAGraphicControl6.DiscardBitmap;
-    Timer6.Enabled := False;
-    Timer5.Enabled := True;
+    Timer_DishonestFloor.Enabled := False;
+    Timer_HonestFloor.Enabled := True;
     floor.X1 := floor.X;
     floor.Y1 := floor.Y;
   end;
 end;
 
 //------------------------АНИМАЦИЯ ЗАДНЕГО ФОНА------------------------\\
-procedure TForm1.Timer7Timer(Sender: TObject);
+procedure TForm1.Timer_BackgroundTimer(Sender: TObject);
 begin
   if (floor.shift1 = 1666) or (floor.shift1 = 833) then
   begin
@@ -558,28 +612,7 @@ begin
   if ((floor.Y1 - floor.heightfloor / 2) - (floor.Y + floor.heightfloor / 2) < floor.fallspeed) and
     (floor.fallcounter > 1) then
     floor.fallspeed := (floor.Y1 - floor.heightfloor div 2) - (floor.Y + floor.heightfloor div 2);
-end;
 
-//------------------------АНИМАЦИЯ СЧЕТЧИКА КОМБО------------------------\\
-procedure TForm1.Timer8Timer(Sender: TObject);
-begin
-  if (label_Combo.Visible = True) then
-    Label_Combo.Font.Orientation := Label_Combo.Font.Orientation - 225;
-  if Label_Combo.Font.Orientation = 275 then
-  begin
-    Timer8.Enabled := False;
-    Timer9.Enabled := True;
-  end;
-end;
-
-procedure TForm1.Timer9Timer(Sender: TObject);
-begin
-  Label_Combo.Font.Orientation := Label_Combo.Font.Orientation + 225;
-  if Label_Combo.Font.Orientation = 500 then
-  begin
-    Timer8.Enabled := True;
-    Timer9.Enabled := False;
-  end;
 end;
 
 end.

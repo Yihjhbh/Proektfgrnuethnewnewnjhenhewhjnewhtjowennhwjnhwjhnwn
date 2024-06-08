@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 1127
   Height = 833
-  Top = 26
+  Top = 0
   Width = 543
   BorderStyle = bsSingle
   Caption = 'Sky Scraper'
@@ -673,61 +673,55 @@ object Form1: TForm1
       180000000049454E44AE426082
     }
   end
-  object Timer1: TTimer
+  object Timer_CraneLeft: TTimer
     Interval = 40
-    OnTimer = Timer1Timer
-    Left = 168
+    OnTimer = Timer_CraneLeftTimer
+    Left = 200
     Top = 560
   end
-  object Timer2: TTimer
+  object Timer_CraneRight: TTimer
     Enabled = False
     Interval = 40
-    OnTimer = Timer2Timer
-    Left = 392
-    Top = 624
+    OnTimer = Timer_CraneRightTimer
+    Left = 256
+    Top = 496
   end
-  object Timer3: TTimer
-    OnTimer = Timer3Timer
-    Left = 336
-    Top = 624
-  end
-  object Timer4: TTimer
+  object Timer_GroundFloor: TTimer
     Interval = 40
-    OnTimer = Timer4Timer
+    OnTimer = Timer_GroundFloorTimer
     Left = 280
     Top = 624
   end
-  object Timer5: TTimer
+  object Timer_HonestFloor: TTimer
     Enabled = False
     Interval = 40
-    OnTimer = Timer5Timer
+    OnTimer = Timer_HonestFloorTimer
     Left = 224
     Top = 624
   end
-  object Timer6: TTimer
+  object Timer_DishonestFloor: TTimer
     Enabled = False
     Interval = 40
-    OnTimer = Timer6Timer
+    OnTimer = Timer_DishonestFloorTimer
     Left = 168
     Top = 624
   end
-  object Timer7: TTimer
-    Interval = 40
-    OnTimer = Timer7Timer
+  object Timer_Background: TTimer
+    Interval = 1
+    OnTimer = Timer_BackgroundTimer
+    Left = 312
+    Top = 560
+  end
+  object Timer_Music: TTimer
+    OnTimer = Timer_MusicTimer
     Left = 336
-    Top = 560
+    Top = 624
   end
-  object Timer8: TTimer
-    Interval = 700
-    OnTimer = Timer8Timer
-    Left = 224
-    Top = 560
-  end
-  object Timer9: TTimer
+  object IdleTimer_ComboEnable: TIdleTimer
     Enabled = False
-    Interval = 700
-    OnTimer = Timer9Timer
-    Left = 280
+    Interval = 2000
+    OnTimer = IdleTimer_ComboEnableTimer
+    Left = 256
     Top = 560
   end
 end

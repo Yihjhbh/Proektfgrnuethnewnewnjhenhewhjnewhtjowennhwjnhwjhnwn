@@ -53,6 +53,13 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   BorderIcons := BorderIcons - [bimaximize];
+  AddFontResource('Architun.ttf');
+  Label_Result1.Font.Name:= 'Architun';
+  Label_Result.Font.Name:= 'Architun';
+  Label_MaxPoint.Font.Name:= 'Architun';
+  Label_MaxCombo.Font.Name:= 'Architun';
+  Label_BestMaxPoint.Font.Name:= 'Architun';
+  Label_BestMaxCombo.Font.Name:= 'Architun';
 end;
 
 procedure TForm2.Image_ExitClick(Sender: TObject);

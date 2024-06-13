@@ -192,6 +192,10 @@ begin
   Label_Point.Caption := 'Счёт: 0';
   Label_Life.Caption := 'Жизни: ' + IntToStr(floor.lifecounter);
   BorderIcons := BorderIcons - [bimaximize];
+  AddFontResource('Architun.ttf');
+  Label_Life.Font.Name:= 'Architun';
+  Label_Point.Font.Name:= 'Architun';
+  Label_Combo.Font.Name:= 'Architun';
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);

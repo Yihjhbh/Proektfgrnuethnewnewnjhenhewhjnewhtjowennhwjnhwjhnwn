@@ -22,12 +22,12 @@ type
     Label_MaxPoint: TLabel;
     Label_MaxCombo: TLabel;
     Label_Result: TLabel;
-    Timer1: TTimer;
+    Timer_Record: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure Image_ExitClick(Sender: TObject);
     procedure Image_AgainClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
+    procedure Timer_RecordTimer(Sender: TObject);
   private
 
   public
@@ -72,7 +72,7 @@ begin
   Form1.Image_UnMute.Visible := Form3.Image_Mute.Visible;
 end;
 
-procedure TForm2.Timer1Timer(Sender: TObject);
+procedure TForm2.Timer_RecordTimer(Sender: TObject);
 var cache: TextFile;
     point, combo: string;
 begin

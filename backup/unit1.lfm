@@ -3832,8 +3832,8 @@ object Form2: TForm2
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object Timer1: TTimer
-    OnTimer = Timer1Timer
+  object Timer_Record: TTimer
+    OnTimer = Timer_RecordTimer
     Left = 312
     Top = 296
   end

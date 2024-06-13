@@ -192,6 +192,8 @@ begin
   Label_Point.Caption := 'Счёт: 0';
   Label_Life.Caption := 'Жизни: ' + IntToStr(floor.lifecounter);
   BorderIcons := BorderIcons - [bimaximize];
+  AddFontResource('Architun.ttf');
+  Label_Life.Font.Name:= 'Architun';
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -479,19 +481,21 @@ begin
           floor.fallboost := 80;
           anglelimit := 34;
         end;
-        if ((floor.fallcounter mod 77 = 0) or (floor.fallcounter mod 112 = 0) or (floor.fallcounter = 21)) and (floor.fallcounter<>0) then
+        if ((floor.fallcounter mod 77 = 0) or (floor.fallcounter mod 112 = 0) or
+          (floor.fallcounter = 21)) and (floor.fallcounter <> 0) then
         begin
           nighton := False;
           evening := True;
           BGRAGraphicControl6.DiscardBitmap;
         end;
-        if (floor.fallcounter mod 91 = 0) and (floor.fallcounter<>0) then
+        if (floor.fallcounter mod 91 = 0) and (floor.fallcounter <> 0) then
         begin
           evening := False;
           nighton := False;
           BGRAGraphicControl6.DiscardBitmap;
         end;
-        if ((floor.fallcounter mod 133 = 0) or (floor.fallcounter = 42)) and (floor.fallcounter<>0) then
+        if ((floor.fallcounter mod 133 = 0) or (floor.fallcounter = 42)) and
+          (floor.fallcounter <> 0) then
         begin
           nighton := True;
           evening := False;
